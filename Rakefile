@@ -18,6 +18,8 @@ EXT_VERIFIER_DIR    = "#{EXT_ROOT_DIR}/verifier"
 EXT_VERIFIER_SRC    = "#{EXT_VERIFIER_DIR}/verifier.c"
 EXT_VERIFIER_DL     = "#{EXT_ROOT_DIR}/verifier.#{CONFIG['DLEXT']}"
 EXT_DEST_DIR      = "lib/ext"
+CLEAN.include FileList["src/**/{Makefile,mkmf.log}"],
+  FileList["{src,lib}/**/*.{so,bundle,#{CONFIG['DLEXT']},o,obj,pdb,lib,manifest,exp,def}"]
 
 task :default => [ EXT_SIGNER_DL, EXT_VERIFIER_DL ]
 
