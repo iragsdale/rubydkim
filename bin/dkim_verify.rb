@@ -1,6 +1,6 @@
 #!/usr/bin/ruby
 # Reads an email in from standard input and tries to verify it
-require "lib/dkim"
+require "dkim"
 
 # read the email
 verifier = DKIM::Verifier.new

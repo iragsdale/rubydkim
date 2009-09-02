@@ -1,6 +1,6 @@
 #!/usr/bin/ruby
 # Reads an email in from standard input and signs it
-require "lib/dkim"
+require "dkim"
 
 domain, selector, keyfile = ARGV
 key = File.readlines(keyfile).to_s

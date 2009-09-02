@@ -1,7 +1,7 @@
 # add our dir to the load path
 $:.unshift File.dirname(__FILE__)
-require 'ext/signer'
-require 'ext/verifier'
+require 'signer'
+require 'verifier'
 # we do DNS lookups in dnsruby
 require 'rubygems'
 require 'dnsruby'
