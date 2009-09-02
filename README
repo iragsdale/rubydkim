@@ -1,0 +1,4 @@
+RubyDKIM - a ruby extension for creating & verifying DKIM signatures
+
+This is a wrapper around the PDKIM project, courtesy of Tom Kistner:
+http://duncanthrax.net/pdkim/

@@ -3,5 +3,5 @@ require 'mkmf'
 if have_library("pdkim1", "pdkim_init_sign")
     create_makefile("signer")
 else
-    puts "no pdkim library found"
+  puts "PDKIM library not found - please install it from http://duncanthrax.net/pdkim/"
 end
