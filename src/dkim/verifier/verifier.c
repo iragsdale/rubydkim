@@ -1,4 +1,5 @@
 #include "ruby.h"
+#include "rubyio.h"
 #include "pdkim1.h"
 
 static VALUE mDKIM, cDKIMVerifier, cDKIMResolver, cDKIMSignature, cTime;
@@ -125,6 +126,29 @@ VALUE verifier_new(VALUE class)
     return obj;
 }
 
+// sends debugging output to the given file
+VALUE verifier_debug(VALUE obj, VALUE file)
+{   
+    // get the dkim context
+    pdkim_ctx *ctx;
+    Data_Get_Struct(obj, pdkim_ctx, ctx);
+    
+    // if we were given a nil object, turn debugging off
+    if (TYPE(file) == T_NIL) {
+        pdkim_set_debug_stream(ctx, NULL);
+    }
+    // if we were given a file, use it for debugging
+    else if (TYPE(file) == T_FILE) {
+        OpenFile *openfile = NULL;
+        GetOpenFile(file, openfile);
+        pdkim_set_debug_stream(ctx, GetWriteFile(openfile));
+    }
+    // otherwise, raise an exception
+    else {
+        rb_raise(rb_eTypeError, "debug requires a file handle");
+    }
+}
+
 // defines the new ruby class and hooks up the proper methods
 void Init_verifier() {
   mDKIM = rb_define_module("DKIM");
@@ -136,5 +160,6 @@ void Init_verifier() {
   rb_define_method(cDKIMVerifier, "initialize", verifier_init, 0);
   rb_define_method(cDKIMVerifier, "feed", verifier_feed, 1);
   rb_define_method(cDKIMVerifier, "finish", verifier_finish, 0);
+  rb_define_method(cDKIMVerifier, "debug", verifier_debug, 1);
 }
 

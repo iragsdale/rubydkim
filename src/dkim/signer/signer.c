@@ -1,4 +1,5 @@
 #include "ruby.h"
+#include "rubyio.h"
 #include "pdkim1.h"
 
 static VALUE mDKIM, cDKIMSigner, cDKIMSignature, cTime;
@@ -102,6 +103,28 @@ VALUE signer_new(VALUE class, VALUE domain, VALUE selector, VALUE key)
     return obj;
 }
 
+// sends debugging output to the given file
+VALUE signer_debug(VALUE obj, VALUE file)
+{   
+    // get the dkim context
+    pdkim_ctx *ctx;
+    Data_Get_Struct(obj, pdkim_ctx, ctx);
+    
+    // if we were given a nil object, turn debugging off
+    if (TYPE(file) == T_NIL) {
+        pdkim_set_debug_stream(ctx, NULL);
+    }
+    // if we were given a file, use it for debugging
+    else if (TYPE(file) == T_FILE) {
+        OpenFile *openfile = NULL;
+        GetOpenFile(file, openfile);
+        pdkim_set_debug_stream(ctx, GetWriteFile(openfile));
+    }
+    // otherwise, raise an exception
+    else {
+        rb_raise(rb_eTypeError, "debug requires a file handle");
+    }
+}
 
 // defines the new ruby class and hooks up the proper methods
 void Init_signer() {
@@ -113,5 +136,6 @@ void Init_signer() {
   rb_define_method(cDKIMSigner, "initialize", signer_init, 0);
   rb_define_method(cDKIMSigner, "feed", signer_feed, 1);
   rb_define_method(cDKIMSigner, "finish", signer_finish, 0);
+  rb_define_method(cDKIMSigner, "debug", signer_debug, 1);
 }
 
