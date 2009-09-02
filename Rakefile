@@ -68,6 +68,13 @@ if defined?(Gem) and defined?(Rake::GemPackageTask)
     s.homepage = "http://github.com/iragsdale/rubydkim"
   end
   
+  desc "Generate gemspec"
+  task :gemspec do
+    File.open("#{spec_ext.name}.gemspec", "w") do |file|
+      file.puts spec_ext.to_ruby
+    end
+  end
+  
   Rake::GemPackageTask.new(spec_ext) do |pkg|
     pkg.need_tar      = true
     pkg.package_files = PKG_FILES
