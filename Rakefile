@@ -50,6 +50,7 @@ if defined?(Gem) and defined?(Rake::GemPackageTask)
     s.version = PKG_VERSION
     s.summary = "A gem for creating & verifying DKIM signatures"
     s.description = "This is a DKIM implementation as a Ruby extension in C."
+    s.add_dependency('dnsruby')
 
     s.files = PKG_FILES
 
