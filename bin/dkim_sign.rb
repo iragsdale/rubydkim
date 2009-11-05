@@ -3,7 +3,7 @@
 require "dkim"
 
 domain, selector, keyfile = ARGV
-key = File.readlines(keyfile).to_s
+key = File.readlines(keyfile).join
 
 # read the email
 signer = DKIM::Signer.new(domain, selector, key)

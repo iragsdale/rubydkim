@@ -1,15 +1,18 @@
 #include "ruby.h"
-#include "rubyio.h"
 #include "pdkim1.h"
+#ifndef GetWriteFile
+  #include "ruby/io.h"
+  #define GetWriteFile(fp) rb_io_stdio_file(fp)
+  #define OpenFile rb_io_t
+#elif
+  #include "rubyio.h"
+#endif
 
 static VALUE mDKIM, cDKIMVerifier, cDKIMResolver, cDKIMSignature, cTime;
 
 // feed data to the dkim context
 VALUE verifier_feed(VALUE obj, VALUE text)
 {
-    // create a pointer for the length of the string
-    int length;
-                 
     // get the dkim context
     pdkim_ctx *ctx;
     Data_Get_Struct(obj, pdkim_ctx, ctx);
@@ -18,10 +21,10 @@ VALUE verifier_feed(VALUE obj, VALUE text)
     char * data = StringValuePtr(text);
     
     // pass the string data to pdkim_feed while setting the length
-    int i = 0;
     if ( pdkim_feed(ctx, data, strlen(data)) != PDKIM_OK) {
         printf("pdkim_feed() error\n");
     }
+    return Qnil;
 }
 
 // create a signature object from a pdkim_signature
@@ -67,7 +70,9 @@ VALUE verifier_finish(VALUE obj)
     
     // finish up the call
     pdkim_signature *signatures;
-    if ( pdkim_feed_finish(ctx,&signatures) == PDKIM_OK ) {
+    
+    int result = pdkim_feed_finish(ctx,&signatures);
+    if ( result == PDKIM_OK ) {
         
         // create an array to hold the new signatures
         VALUE rsigs = rb_ary_new();
@@ -84,8 +89,7 @@ VALUE verifier_finish(VALUE obj)
         return rsigs;
     }
     else {
-        printf("pdkim_feed_finish error");
-        return rb_str_new2("");
+        rb_raise(rb_eRuntimeError, "error finishing signature: %d", result);
     }
 }
 
@@ -147,6 +151,7 @@ VALUE verifier_debug(VALUE obj, VALUE file)
     else {
         rb_raise(rb_eTypeError, "debug requires a file handle");
     }
+    return Qnil;
 }
 
 // defines the new ruby class and hooks up the proper methods
