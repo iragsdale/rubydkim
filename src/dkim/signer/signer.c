@@ -1,6 +1,7 @@
 #include "ruby.h"
 #include "pdkim1.h"
-#ifndef GetWriteFile
+
+#ifdef HAVE_RUBY_IO_H
   #include "ruby/io.h"
   #define GetWriteFile(fp) rb_io_stdio_file(fp)
   #define OpenFile rb_io_t
@@ -127,7 +128,7 @@ VALUE signer_debug(VALUE obj, VALUE file)
     else {
         rb_raise(rb_eTypeError, "debug requires a file handle");
     }
-    return RUBY_T_NONE;
+    return T_NONE;
 }
 
 // defines the new ruby class and hooks up the proper methods

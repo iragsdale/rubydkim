@@ -1,6 +1,7 @@
 #include "ruby.h"
 #include "pdkim1.h"
-#ifndef GetWriteFile
+
+#ifdef HAVE_RUBY_IO_H
   #include "ruby/io.h"
   #define GetWriteFile(fp) rb_io_stdio_file(fp)
   #define OpenFile rb_io_t
