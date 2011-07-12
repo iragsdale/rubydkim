@@ -9,6 +9,10 @@
   #include "rubyio.h"
 #endif
 
+#ifndef STR2CSTR
+#define STR2CSTR StringValueCStr
+#endif
+
 static VALUE mDKIM, cDKIMVerifier, cDKIMResolver, cDKIMSignature, cTime;
 
 // feed data to the dkim context
