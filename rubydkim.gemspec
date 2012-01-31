@@ -2,11 +2,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{rubydkim}
-  s.version = "0.3.1"
+  s.version = "0.3.1.1"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Ian Ragsdale"]
-  s.date = %q{2010-07-24}
+  s.date = %q{2012-01-31}
   s.default_executable = %q{dkim_verify.rb}
   s.description = %q{This is a DKIM implementation as a Ruby extension in C.}
   s.email = %q{ian.ragsdale@gmail.com}
