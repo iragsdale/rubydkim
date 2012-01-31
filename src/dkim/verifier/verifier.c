@@ -101,7 +101,7 @@ int query_dns_txt(char *name, char *answer) {
     VALUE record = rb_funcall(cDKIMResolver, rb_intern("lookup_record"), 1, rb_str_new2(name));
 
     // copy the results to the context
-    strcpy(answer, STR2CSTR(record));
+    strcpy(answer, StringValuePtr(record));
     return PDKIM_OK;
 }
 
