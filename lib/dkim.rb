@@ -36,7 +36,7 @@ module DKIM
       resolver = Dnsruby::DNS.new
       resources = resolver.getresources(domain, Dnsruby::Types::TXT)
       if resources
-        return resources.collect {|r| r.data}.join
+        return resources.collect {|r| r.strings}.join
       else
         return ""
       end
