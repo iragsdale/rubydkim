@@ -97,10 +97,10 @@ static VALUE signer_init(VALUE self) {
 VALUE signer_new(VALUE class, VALUE domain, VALUE selector, VALUE key)
 {
     // create the DKIM context
-    pdkim_ctx *ctx = pdkim_init_sign(PDKIM_INPUT_NORMAL,    /* Input type */
-                                       STR2CSTR(domain),    /* Domain   */
-                                       STR2CSTR(selector),  /* Selector */
-                                       STR2CSTR(key)        /* Private RSA key */
+    pdkim_ctx *ctx = pdkim_init_sign(PDKIM_INPUT_NORMAL,          /* Input type */
+                                       StringValuePtr(domain),    /* Domain   */
+                                       StringValuePtr(selector),  /* Selector */
+                                       StringValuePtr(key)        /* Private RSA key */
                        );
     
     // wrap it into our class
